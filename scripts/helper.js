@@ -33,26 +33,13 @@ async function readwrite (filePath, outputFileName) {
 
 // lists
 
+// lists
+
 const Roots = [
     {id:0,note:"C"},{id:1,note:"C#/Db"},{id:2,note:"D"},
     {id:3,note:"D#/Eb"},{id:4,note:"E"},{id:5,note:"F"},
     {id:6,note:"F#/Gb"},{id:7,note:"G"},{id:8,note:"G#/Ab"},
     {id:9,note:"A"},{id:10,note:"A#/Bb"},{id:11,note:"B"},
-]
-
-const Intervals = [
-    {distance:0,type:"unison"},
-    {distance:1,type:"minor2"},
-    {distance:2,type:"major2"},
-    {distance:3,type:"minor3"},
-    {distance:4,type:"major3"},
-    {distance:5,type:"perf4"},
-    {distance:6,type:"tritone"},
-    {distance:7,type:"perf5"},
-    {distance:8,type:"min6"},
-    {distance:9,type:"maj6"},
-    {distance:10,type:"min7"},
-    {distance:11,type:"maj7"}
 ]
 
 const minorSecondIntervals = {
@@ -120,6 +107,31 @@ const travelIntervals = [perfFifthIntervals,tritoneIntervals,perfFourthIntervals
 
 const resolvingIntervals = [perfFifthIntervals,tritoneIntervals,perfFourthIntervals,majorSecondIntervals,minorSecondIntervals,majorSeventhIntervals,minorSeventhIntervals];
 
+const Intervals = [
+    // {distance:0,type:"unison"},
+    {distance:1,type:"minor2",list:minorSecondIntervals},
+    {distance:2,type:"major2",list:majorSecondIntervals},
+    {distance:3,type:"minor3",list:minorThirdIntervals},
+    {distance:4,type:"major3",list:majorThirdIntervals},
+    {distance:5,type:"perf4",list:perfFourthIntervals},
+    {distance:6,type:"tritone",list:tritoneIntervals},
+    {distance:7,type:"perf5",list:perfFifthIntervals},
+    {distance:8,type:"min6",list:minorSixthIntervals},
+    {distance:9,type:"maj6",list:majorSixthIntervals},
+    {distance:10,type:"min7",list:minorSeventhIntervals},
+    {distance:11,type:"maj7",list:majorSeventhIntervals}
+]
+
+const ResIntervals = [
+    // {distance:0,type:"unison"},
+    {distance:1,type:"minor2",list:minorSecondIntervals},
+    {distance:2,type:"major2",list:majorSecondIntervals},
+    {distance:5,type:"perf4",list:perfFourthIntervals},
+    {distance:6,type:"tritone",list:tritoneIntervals},
+    {distance:7,type:"perf5",list:perfFifthIntervals},
+    {distance:10,type:"min7",list:minorSeventhIntervals},
+    {distance:11,type:"maj7",list:majorSeventhIntervals}
+]
 
 // chord aliases 
 function chordAlias (chordType) {
@@ -165,6 +177,10 @@ function getRandomInterval(intervalList) {
     return intervalList[getRandomInt(intervalList.length)]
 }
 
+function getRandomChord(chordList) {
+    return chordList[getRandomInt(chordList.length)]
+}
+
 // calculations - intervals, wrapping to octave, next root based on interval
 
 function calculateInterval(rootA,rootB) {
@@ -176,7 +192,7 @@ function wrapOctave(interval){
     return interval%12
 }
 
-function getNextChord(rootNote, interval){
+function getNextRoot(rootNote, interval){
     return wrapOctave(rootNote.id + interval)
 }
 
@@ -184,7 +200,33 @@ function getChords (intervalType, tarChordType) {
     return intervalType.chords.find((element) => element.targetChord == tarChordType).tensionChord;
 }
 
+function getRandomChordType () {
+    let endChordList = ['maj','min']
+    return endChordList[getRandomInt(endChordList.length)]
+}
+
+
 // testing
+
+//// variables
+
+let root1=getRandomRoot(Roots);
+
+let interval=getRandomInterval(Intervals).distance
+
+// newRoot = interval + root1.id
+let newRoot = getNextRoot(root1,interval)
+
+
+//// finding new root based on random interval above root 2
+
+    // console.log("root1: ", root1)
+    // console.log("root1 id: ", root1.id)
+    // console.log("random interval distance: ", interval)
+    // console.log("root + interval: ",newRoot)
+
+// once interval is determined, use target chord to work out possible tension chord
+// console.log(getChords(majorSeventhIntervals,"maj"))
 
 // starting from last chord
     // set up intervals
@@ -193,18 +235,19 @@ function getChords (intervalType, tarChordType) {
 
                 let startRoot=getRandomRoot(Roots);
                 let startType=getRandomChordType();
-                console.log(`${startRoot.note}${startType}`)
+                let startChord=`${startRoot.note}${startType}`
                 // console.log(startRoot)
     
         // resolving chord (built off of chord before)
             // random interval, random type based on type of target chord
 
-                let resInterval=getRandomInterval(Intervals);
+                let resInterval=getRandomInterval(ResIntervals);
                 let resRoot=Roots[getNextRoot(startRoot, resInterval.distance)].note
                 let resChordTypesArray=resInterval.list.chords.find((element) => element.targetChord == startType).tensionChord
                 let resChordType = resChordTypesArray[getRandomInt(resChordTypesArray.length)]
-                console.log(resChordType)
-                // console.log(resInterval)
+                let resChord=`${resRoot}${resChordType}`
+            
+                console.log(startChord, resChord)
 
         // travel chord into resolving chord (if more than 2 chords)
 
@@ -229,7 +272,6 @@ function getChords (intervalType, tarChordType) {
 
 // console.log(found.thing);
 // Expected output: 12
-
 
 // process
     // determine start chord
