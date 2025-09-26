@@ -186,24 +186,49 @@ function getChords (intervalType, tarChordType) {
 
 // testing
 
-//// variables
+// starting from last chord
+    // set up intervals
+        // starting note
+            // random root, chord type
 
-let root1=getRandomRoot(Roots)
-let root2=getRandomRoot(Roots)
-let newRoot;
+                let startRoot=getRandomRoot(Roots);
+                let startType=getRandomChordType();
+                console.log(`${startRoot.note}${startType}`)
+                // console.log(startRoot)
+    
+        // resolving chord (built off of chord before)
+            // random interval, random type based on type of target chord
 
-let interval=getRandomInterval(Intervals).distance
+                let resInterval=getRandomInterval(Intervals);
+                let resRoot=Roots[getNextRoot(startRoot, resInterval.distance)].note
+                let resChordTypesArray=resInterval.list.chords.find((element) => element.targetChord == startType).tensionChord
+                let resChordType = resChordTypesArray[getRandomInt(resChordTypesArray.length)]
+                console.log(resChordType)
+                // console.log(resInterval)
 
-newRoot = interval + root2.id
-let newRoot2 = getNextChord(root2,interval)
+        // travel chord into resolving chord (if more than 2 chords)
+
+                let travelInterval;
+                let travelType;
+
+        // travel chord going into travel chords (if more than 2 chords)
+            // consider using a loop?
+
+// to dos
+    // work out calculations - starting from first chord, back to resolving chord, back to travel chord
 
 
-// finding new root based on random interval above root 2
+// later on
+    // add other chord types onto list - sus chords, 6 chords
 
-console.log("root2: ", root2)
-console.log("root2 id: ", root2.id)
-console.log("random interval distance: ", interval)
-console.log("root + interval: ",newRoot2)
+// testing
+
+// const array = [{id:5,thing:"banana"}, {id:12, thing:"strawberry"}, {id:8}, {id:130}, {id:44}];
+
+// const found = array.find((element) => element.id > 10);
+
+// console.log(found.thing);
+// Expected output: 12
 
 
 // process
