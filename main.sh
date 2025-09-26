@@ -1,9 +1,9 @@
 #! /bin/bash
 
 # variable examples
-rawHTML="poemaday.html"
-scrapedText="AsKar.txt"
-url="https://poets.org/poem-a-day"
+# rawHTML="poemaday.html"
+# scrapedText="AsKar.txt"
+# url="https://poets.org/poem-a-day"
 
 if [ "$1" = "a" ] 
 then
