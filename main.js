@@ -1,9 +1,33 @@
-const process = require('process');
-const utility = require('./scripts/helper')
-const specific = require('./scripts/specific')
+import process from 'node:process'
+import { createResChord, createStartChord, createTravelChord } from './scripts/chord.mjs'
+
+// create function for chord function order - put on main
+    // calls functions in predefined order, prints to console
+    // build in params for...
+        // pattern of chords
+        // number of chords
+
+// to dos
+    // configs
+        // number of chords
+    // chord order
+        // currently is Start, Travel, Res by default
+        // could make order custom - like inserting a res chord before a travel chord?
+    // work out if sh file should be kept?
+
+// later on
+    // add other chord types onto list - sus chords, 6 chords
+    // work out aug and dim chord motions for res chords
+    // look into why travel chord calculation is hanging
+
 
 const processRoute = process.argv[2]
 const inputName = process.argv[3]
+
+let startChord = createStartChord()
+let resChord=createResChord(startChord)
+let travelChord = createTravelChord(resChord)
+console.log(startChord, resChord, travelChord)
 
 if (processRoute=="a"){
     console.log('route a...')
