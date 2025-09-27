@@ -10,37 +10,51 @@ export const Roots = [
 const minorSecondIntervals = {
     id:1,chords:[ 
     {targetChord:"maj",tensionChord:["maj","min","dim","aug","maj7","dom7","min7","maj7+"]},
-    {targetChord:"min",tensionChord:["maj","min","aug","maj7","dom7","min7","maj7+"]}
+    {targetChord:"min",tensionChord:["maj","min","aug","maj7","dom7","min7","maj7+"]},
+    {targetChord:"aug",tensionChord:["maj","min","dim","aug"]},
+    {targetChord:"dim",tensionChord:["maj","min","dim","aug"]}
 ]}
 const majorSecondIntervals = {
     id:2,chords:[
     {targetChord:"maj",tensionChord:["maj","min","dim","aug"]},
-    {targetChord:"min",tensionChord:["maj","min","dim","aug"]}
+    {targetChord:"min",tensionChord:["maj","min","dim","aug"]},
+    {targetChord:"aug",tensionChord:["maj","min","dim","aug"]},
+    {targetChord:"dim",tensionChord:["maj","min","dim","aug"]}
 ]}
 const perfFourthIntervals = {
     id:5,chords:[
     {targetChord:"maj",tensionChord:["maj","min","dim","aug","maj7","min7","dom7","min7","minmaj7"]},
-    {targetChord:"min",tensionChord:["maj","min","dim","aug","maj7","min7","minmaj7"]}
+    {targetChord:"min",tensionChord:["maj","min","dim","aug","maj7","min7","minmaj7"]},
+    {targetChord:"aug",tensionChord:["maj","min","dim","aug"]},
+    {targetChord:"dim",tensionChord:["maj","min","dim","aug"]}
 ]}
 const tritoneIntervals = {
     id:6,chords:[
     {targetChord:"maj",tensionChord:["maj","min","dim","aug","m7b5","dim7","min7","dimmaj7"]},
-    {targetChord:"min",tensionChord:["min","dim","aug","m7b5","min7","dimmaj7","dom7"]}
+    {targetChord:"min",tensionChord:["min","dim","aug","m7b5","min7","dimmaj7","dom7"]},
+    {targetChord:"aug",tensionChord:["maj","min","dim","aug"]},
+    {targetChord:"dim",tensionChord:["maj","min","dim","aug"]}
 ]}
 const perfFifthIntervals = {
     id:7,chords:[
     {targetChord:"maj",tensionChord:["maj","min","dim","aug","dom7","min7","dim7"]},
-    {targetChord:"min",tensionChord:["maj","min","dim","aug","dom7","min7","dim7"]}
+    {targetChord:"min",tensionChord:["maj","min","dim","aug","dom7","min7","dim7"]},
+    {targetChord:"aug",tensionChord:["maj","min","dim","aug"]},
+    {targetChord:"dim",tensionChord:["maj","min","dim","aug"]}
 ]}
 const minorSeventhIntervals = {
     id:10,chords:[
     {targetChord:"maj",tensionChord:["maj","min","dim","aug","dom7","m7b5"]},
-    {targetChord:"min",tensionChord:["maj","min","dim","aug","dom7","m7b5","dim7"]}
+    {targetChord:"min",tensionChord:["maj","min","dim","aug","dom7","m7b5","dim7"]},
+    {targetChord:"aug",tensionChord:["maj","min","dim","aug"]},
+    {targetChord:"dim",tensionChord:["maj","min","dim","aug"]}
 ]}
 const majorSeventhIntervals = {
     id:11,chords:[
     {targetChord:"maj",tensionChord:["dim","dim7","m7b5","min"]},
-    {targetChord:"min",tensionChord:["dim","dim7","m7b5","min"]}
+    {targetChord:"min",tensionChord:["dim","dim7","m7b5","min"]},
+    {targetChord:"aug",tensionChord:["maj","min","dim","aug"]},
+    {targetChord:"dim",tensionChord:["maj","min","dim","aug"]}
 ]}
 
 const minorThirdIntervals = {id:3,chords:[
@@ -169,6 +183,7 @@ export function getChords (intervalType, tarChordType) {
 
 
 export function getRandomChordType () {
-    let endChordList = ['maj','min']
+    let endChordList = ['maj','min','min7','maj7','dom7','dim7','m7b5','dimM7','M7+','min7']
+  
     return endChordList[getRandomInt(endChordList.length)]
 }

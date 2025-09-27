@@ -1,5 +1,5 @@
 import process from 'node:process'
-import { createResChord, createStartChord, createTravelChord } from './scripts/chord.mjs'
+import { createResChord, createStartChord, createTravelChord, progressionCreator } from './scripts/chord.mjs'
 
 // create function for chord function order - put on main
     // calls functions in predefined order, prints to console
@@ -21,19 +21,13 @@ import { createResChord, createStartChord, createTravelChord } from './scripts/c
     // look into why travel chord calculation is hanging
 
 
-const processRoute = process.argv[2]
-const inputName = process.argv[3]
+const chordPattern = process.argv[2]
 
-let startChord = createStartChord()
-let resChord=createResChord(startChord)
-let travelChord = createTravelChord(resChord)
-console.log(startChord, resChord, travelChord)
+// let startChord = createStartChord()
+// let resChord=createResChord(startChord)
+// let travelChord = createTravelChord(resChord)
+// console.log(startChord, resChord, travelChord)
 
-if (processRoute=="a"){
-    console.log('route a...')
+let chordList = progressionCreator(chordPattern)
 
-} else if (processRoute=="b") {
-    console.log('route b...')
-} else {
-    console.log('please indicate a route')
-}
+// console.log(chordList)
