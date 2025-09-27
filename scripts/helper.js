@@ -177,7 +177,6 @@ function getRandomChordType () {
                 let startRoot=getRandomRoot(Roots);
                 let startType=getRandomChordType();
                 let startChord=`${startRoot.note}${startType}`
-                // console.log(startRoot)
     
         // resolving chord (built off of chord before)
             // random interval, random type based on type of target chord
@@ -188,7 +187,6 @@ function getRandomChordType () {
                 let resChordType = resChordTypesArray[getRandomInt(resChordTypesArray.length)]
                 let resChord=`${resRoot.note}${resChordType}`
 
-
         // travel chord into resolving chord (if more than 2 chords)
 
                 let travelInterval;
@@ -198,32 +196,37 @@ function getRandomChordType () {
                 let travelTensionChordArray;
                 while (travelChordTypeArray == undefined){
                     travelInterval=getRandomInterval(TravelIntervals);
-                    // console.log('travel interval ',travelInterval)
                     travelRoot=Roots[getNextRoot(resRoot, travelInterval.distance)].note
-                    // console.log(travelRoot)
-                    // console.log('travel chord list ', travelInterval.list.chords)
-                    // console.log('res chord type', resChordType)
-                    // console.log('alias chord ', chordAlias(resChordType))
                     travelChordTypeArray=travelInterval.list.chords.find((element) => element.targetChord == chordAlias(resChordType))
-                    // console.log(travelChordTypeArray)
                 }
                 travelChordType=travelChordTypeArray.tensionChord[getRandomInt(travelChordTypeArray.tensionChord.length)]
 
                 let travelChord = `${travelRoot}${travelChordType}`
-                console.log('start chord ', startChord, 'travel chord ', travelChord,' res chord ', resChord)
+                console.log( startChord, travelChord, resChord)
  
-
-
         // travel chord going into travel chords (if more than 2 chords)
-                // let subtravelInterval=getRandomInterval(TravelIntervals);
-                // let subtravelRoot=Roots[getNextRoot(travelRoot, subtravelInterval.distance)].note
-                // let subtravelChordTypesArray=subtravelInterval.list.chords.find((element) => element.targetChord == startType).tensionChord
-                // let subtravelChordType = travelChordTypesArray[getRandomInt(travelChordTypesArray.length)]
-                // let subtravelChord=`${travelRoot}${travelChordType}`
-                // console.log(startChord, travelChord, resChord)
+                let subTravelInterval;
+                let subTravelRoot;
+                let subTravelChordTypeArray;
+                let subTravelChordType
+                let subTravelTensionChordArray;
+                while (subTravelChordTypeArray == undefined){
+                    subTravelInterval=getRandomInterval(TravelIntervals);
+                    subTravelRoot=Roots[getNextRoot(travelRoot, subTravelInterval.distance)]
+                    subTravelChordTypeArray=subTravelInterval.list.chords.find((element) => element.targetChord == chordAlias(travelChordType))
+                }
+                subTravelChordType=subTravelChordTypeArray.tensionChord[getRandomInt(subTravelChordTypeArray.tensionChord.length)]
+                let subTravelChord = `${subTravelRoot.note}${subTravelChordType}`
+                console.log( startChord, subTravelChord, travelChord, resChord)
 
 // to dos
-    // work out calculations - starting from first chord, back to resolving chord, back to travel chord
+    // make chord calculation modular
+        // start chord is whatever
+        // res chord is fine
+        // travel chord -> could be modular
+    // configs
+        // number of chords
+        // 
 
 
 // later on
