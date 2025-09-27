@@ -1,6 +1,6 @@
 // lists
 
-const Roots = [
+export const Roots = [
     {id:0,note:"C"},{id:1,note:"C#/Db"},{id:2,note:"D"},
     {id:3,note:"D#/Eb"},{id:4,note:"E"},{id:5,note:"F"},
     {id:6,note:"F#/Gb"},{id:7,note:"G"},{id:8,note:"G#/Ab"},
@@ -68,7 +68,7 @@ const majorSixthIntervals = {id:9,chords:[
     {targetChord:"aug",tensionChord:["maj","maj7","dom7","dim","m7b5","dim7"]}
 ]}
 
-const TravelIntervals = [
+export const TravelIntervals = [
     // {distance:0,type:"unison"},
     {distance:1,type:"minor2",list:minorSecondIntervals},
     {distance:2,type:"major2",list:majorSecondIntervals},
@@ -83,7 +83,8 @@ const TravelIntervals = [
     {distance:11,type:"maj7",list:majorSeventhIntervals}
 ]
 
-const ResIntervals = [
+
+export const ResIntervals = [
     // {distance:0,type:"unison"},
     {distance:1,type:"minor2",list:minorSecondIntervals},
     {distance:2,type:"major2",list:majorSecondIntervals},
@@ -94,8 +95,7 @@ const ResIntervals = [
     {distance:11,type:"maj7",list:majorSeventhIntervals}
 ]
 
-// chord aliases 
-function chordAlias (chordType) {
+export function chordAlias (chordType) {
     switch (chordType) {
     case "maj7":
         return "maj"
@@ -126,118 +126,49 @@ function chordAlias (chordType) {
 
 // random nums
 
-function getRandomInt(max) {
+export function getRandomInt(max) {
     return Math.floor(Math.random() * max);
 }
 
-function getRandomRoot(rootList) {
+export function getRandomRoot(rootList) {
     return rootList[getRandomInt(rootList.length)]
 }
 
-function getRandomInterval(intervalList) {
+
+export function getRandomInterval(intervalList) {
     return intervalList[getRandomInt(intervalList.length)]
 }
 
-function getRandomChord(chordList) {
+
+export function getRandomChord(chordList) {
     return chordList[getRandomInt(chordList.length)]
 }
 
 // calculations - intervals, wrapping to octave, next root based on interval
 
-function calculateInterval(rootA,rootB) {
+
+export function calculateInterval(rootA,rootB) {
     let distance=Math.abs(rootA.id-rootB.id)
     return distance
 }
 
-function wrapOctave(interval){
+
+export function wrapOctave(interval){
     return interval%12
 }
 
-function getNextRoot(rootNote, interval){
+
+export function getNextRoot(rootNote, interval){
     return wrapOctave(rootNote.id + interval)
 }
 
-function getChords (intervalType, tarChordType) {
+
+export function getChords (intervalType, tarChordType) {
     return intervalType.chords.find((element) => element.targetChord == tarChordType).tensionChord;
 }
 
-function getRandomChordType () {
+
+export function getRandomChordType () {
     let endChordList = ['maj','min']
     return endChordList[getRandomInt(endChordList.length)]
 }
-
-
-// testing
-
-// starting from last chord
-    // set up intervals
-        // starting note
-            // random root, chord type
-
-                let startRoot=getRandomRoot(Roots);
-                let startType=getRandomChordType();
-                let startChord=`${startRoot.note}${startType}`
-    
-        // resolving chord (built off of chord before)
-            // random interval, random type based on type of target chord
-
-                let resInterval=getRandomInterval(ResIntervals);
-                let resRoot=Roots[getNextRoot(startRoot, resInterval.distance)]
-                let resChordTypesArray=resInterval.list.chords.find((element) => element.targetChord == startType).tensionChord
-                let resChordType = resChordTypesArray[getRandomInt(resChordTypesArray.length)]
-                let resChord=`${resRoot.note}${resChordType}`
-
-        // travel chord into resolving chord (if more than 2 chords)
-
-                let travelInterval;
-                let travelRoot;
-                let travelChordTypeArray;
-                let travelChordType
-                let travelTensionChordArray;
-                while (travelChordTypeArray == undefined){
-                    travelInterval=getRandomInterval(TravelIntervals);
-                    travelRoot=Roots[getNextRoot(resRoot, travelInterval.distance)].note
-                    travelChordTypeArray=travelInterval.list.chords.find((element) => element.targetChord == chordAlias(resChordType))
-                }
-                travelChordType=travelChordTypeArray.tensionChord[getRandomInt(travelChordTypeArray.tensionChord.length)]
-
-                let travelChord = `${travelRoot}${travelChordType}`
-                console.log( startChord, travelChord, resChord)
- 
-        // travel chord going into travel chords (if more than 2 chords)
-                let subTravelInterval;
-                let subTravelRoot;
-                let subTravelChordTypeArray;
-                let subTravelChordType
-                let subTravelTensionChordArray;
-                while (subTravelChordTypeArray == undefined){
-                    subTravelInterval=getRandomInterval(TravelIntervals);
-                    subTravelRoot=Roots[getNextRoot(travelRoot, subTravelInterval.distance)]
-                    subTravelChordTypeArray=subTravelInterval.list.chords.find((element) => element.targetChord == chordAlias(travelChordType))
-                }
-                subTravelChordType=subTravelChordTypeArray.tensionChord[getRandomInt(subTravelChordTypeArray.tensionChord.length)]
-                let subTravelChord = `${subTravelRoot.note}${subTravelChordType}`
-                console.log( startChord, subTravelChord, travelChord, resChord)
-
-// to dos
-    // make chord calculation modular
-        // start chord is whatever
-        // res chord is fine
-        // travel chord -> could be modular
-    // configs
-        // number of chords
-        // 
-
-
-// later on
-    // add other chord types onto list - sus chords, 6 chords
-
-// testing
-
-// const array = [{id:5,thing:"banana"}, {id:12, thing:"strawberry"}, {id:8}, {id:130}, {id:44}];
-
-// const found = array.find((element) => element.id > 10);
-
-// console.log(found.thing);
-// Expected output: 12
-
