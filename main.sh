@@ -17,4 +17,4 @@
 #     echo "Please indicate a valid route."
 # fi
 
-node main.js s
+node main.js srtrt

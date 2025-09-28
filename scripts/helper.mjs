@@ -166,21 +166,17 @@ export function calculateInterval(rootA,rootB) {
     return distance
 }
 
-
 export function wrapOctave(interval){
     return interval%12
 }
-
 
 export function getNextRoot(rootNote, interval){
     return wrapOctave(rootNote.id + interval)
 }
 
-
 export function getChords (intervalType, tarChordType) {
     return intervalType.chords.find((element) => element.targetChord == tarChordType).tensionChord;
 }
-
 
 export function getRandomChordType () {
     let endChordList = ['maj','min','min7','maj7','dom7','dim7','m7b5','dimM7','M7+','min7']
