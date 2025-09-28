@@ -123,13 +123,16 @@ export function chordAlias (chordType) {
     case "m7b5":
         return "dim"
         break;
-    case "dimM7":
+    case "dimmaj7":
         return "dim"
         break;
-    case "M7+":
+    case "maj7+":
         return "aug"
         break;
     case "min7":
+        return "min"
+        break;
+    case "minmaj7":
         return "min"
         break;
     // ... more cases
@@ -179,7 +182,7 @@ export function getChords (intervalType, tarChordType) {
 }
 
 export function getRandomChordType () {
-    let endChordList = ['maj','min','min7','maj7','dom7','dim7','m7b5','dimM7','M7+','min7']
+    let endChordList = ['maj','min','min7','maj7','dom7','dim7','m7b5','dimmaj7','maj7+','min7']
   
     return endChordList[getRandomInt(endChordList.length)]
 }

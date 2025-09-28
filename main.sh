@@ -17,4 +17,7 @@
 #     echo "Please indicate a valid route."
 # fi
 
-node main.js srtrt
+# always needs to start with 's' - this is the starting chord
+# 't' and 'r' are for 'travel' and 'resolution' chords
+
+node main.js strtrtrtrtr
