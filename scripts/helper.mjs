@@ -163,12 +163,6 @@ export function getRandomChord(chordList) {
 
 // calculations - intervals, wrapping to octave, next root based on interval
 
-
-export function calculateInterval(rootA,rootB) {
-    let distance=Math.abs(rootA.id-rootB.id)
-    return distance
-}
-
 export function wrapOctave(interval){
     return interval%12
 }
@@ -178,11 +172,11 @@ export function getNextRoot(rootNote, interval){
 }
 
 export function getChords (intervalType, tarChordType) {
-    return intervalType.chords.find((element) => element.targetChord == tarChordType).tensionChord;
+    return intervalType.list.chords.find((element) => element.targetChord == chordAlias(tarChordType));
 }
 
 export function getRandomChordType () {
     let endChordList = ['maj','min','min7','maj7','dom7','dim7','m7b5','dimmaj7','maj7+','min7']
-  
+    // let endChordList = ['maj','min','min7','maj7','min7']
     return endChordList[getRandomInt(endChordList.length)]
 }

@@ -20,4 +20,14 @@
 # always needs to start with 's' - this is the starting chord
 # 't' and 'r' are for 'travel' and 'resolution' chords
 
-node main.js strtrtrtrtr
+count=10
+counter=0
+NOW=${EPOCHSECONDS}
+
+while [ $counter -lt $count ]
+do 
+    node index.js srtr >> ./data/output/output-$NOW.txt
+    echo "==================" >> ./data/output/output-$NOW.txt
+
+    counter=`expr $counter + 1`
+done
