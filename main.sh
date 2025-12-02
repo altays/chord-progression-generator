@@ -24,10 +24,18 @@ count=10
 counter=0
 NOW=${EPOCHSECONDS}
 
+
+
+echo "==================" >> ./data/output/chord-output-$NOW.md
+echo "$LS" >> ./data/output/chord-output-$NOW.md
+
 while [ $counter -lt $count ]
 do 
-    node index.js srtr >> ./data/output/output-$NOW.txt
-    echo "==================" >> ./data/output/output-$NOW.txt
+
+    node index.js srtr >> ./data/output/chord-output-$NOW.md
 
     counter=`expr $counter + 1`
 done
+
+echo "$LS" >> ./data/output/chord-output-$NOW.md
+echo "==================" >> ./data/output/chord-output-$NOW.md
