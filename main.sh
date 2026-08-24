@@ -24,18 +24,43 @@ count=10
 counter=0
 NOW=${EPOCHSECONDS}
 
+if [ "$1" = "chromatic" ] 
+then
+    # echo "chromatic progression"
+
+    echo "==================" >> ./data/output/chord-output-$NOW.md
+    echo "$LS" >> ./data/output/chord-output-$NOW.md
+
+    while [ $counter -lt $count ]
+    do 
+        node index.js chromatic srtr >> ./data/output/chord-output-$NOW.md
+
+        counter=`expr $counter + 1`
+    done
+
+    echo "$LS" >> ./data/output/chord-output-$NOW.md
+    echo "==================" >> ./data/output/chord-output-$NOW.md
+
+    
+elif [ "$1" = "tonal" ]
+then
+    
+    echo "==================" >> ./data/output/chord-output-$NOW.md
+    echo "$LS" >> ./data/output/chord-output-$NOW.md
+
+    while [ $counter -lt $count ]
+    do 
+        node index.js tonal >> ./data/output/chord-output-$NOW.md
+
+        counter=`expr $counter + 1`
+    done
+
+    echo "$LS" >> ./data/output/chord-output-$NOW.md
+    echo "==================" >> ./data/output/chord-output-$NOW.md
 
 
-echo "==================" >> ./data/output/chord-output-$NOW.md
-echo "$LS" >> ./data/output/chord-output-$NOW.md
+else
+    echo "Please indicate a valid route."
+fi
 
-while [ $counter -lt $count ]
-do 
 
-    node index.js srtr >> ./data/output/chord-output-$NOW.md
-
-    counter=`expr $counter + 1`
-done
-
-echo "$LS" >> ./data/output/chord-output-$NOW.md
-echo "==================" >> ./data/output/chord-output-$NOW.md
