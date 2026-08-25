@@ -180,3 +180,9 @@ export function getRandomChordType () {
     // let endChordList = ['maj','min','min7','maj7','min7']
     return endChordList[getRandomInt(endChordList.length)]
 }
+
+export function getRandomTriad () {
+    let endChordList = ['maj','min','dim']
+    // let endChordList = ['maj','min','min7','maj7','min7']
+    return endChordList[getRandomInt(endChordList.length)]
+}

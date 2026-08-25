@@ -14,7 +14,7 @@ export function createChord(subChord,Intervals) {
     return {root: chordRoot, type: chordType}
 }
 
-export function progressionCreator(progression){
+export function chromaticProgressionCreator(progression){
     let chordList = []
     let currentChord = []
 
