@@ -7,7 +7,7 @@ import  { Roots, getRandomInt, getRandomRoot,getRandomInterval, getRandomChord, 
         // Minor Route
 
 
-// create random progression route
+// create random progression route - one layer
     // end on tonic
     // random number of chords - from 2 to 8
     // chord routes
@@ -17,65 +17,81 @@ import  { Roots, getRandomInt, getRandomRoot,getRandomInterval, getRandomChord, 
         // dom to tonic or sub
         // tonic to sub or dom
 
-console.log(createTonalProgression(2))
+// create random progression route - 2ndary doms
+    // end on tonic
+    // random number of chords - from 2 to 8
+    // chord routes
+        // 1234567t
+        // sub to tonic or dom OR 2ndary 25 of sub
+        // mediant to tonic or sub OR 2ndary 25 of med
+        // dom to tonic or sub OR 2ndary 25 of dom
+        // tonic to sub or dom
+
+
+
+// logic for 2ndary chords
+    // chance to add in 2ndary chords
+    // if chance is over X, add after current
+    // add current chord (not 2ndaries) to current chord list
+
+
+console.log(createTonalProgression(10))
 
 function createTonalProgression(num) {
     let progressionStr = "t"
     let currentChord = "t"
-    let subChance, domChance, medChance, tonicChance;
-    // chord types are t, s, d, m
+    let subChance, domChance, medChance, tonicChance, secondaryChance;
+    // chord types are t, s, d, m -> primary
+        // d -> substitute in dom + dom extensions (tonic over V, Vsus4, etc)
+    // secondary chord types
+        // x - 2ndary dom - substitutions for major/minor route, tritone subs, dom extensions
 
     for (let i = 0; i < num; i++){
-        subChance = getRandomInt(25)+25;
-        domChance = getRandomInt(25)+25;
-        medChance = getRandomInt(10)+10;
+        subChance = getRandomInt(5)+15;
+        domChance = getRandomInt(5)+15;
+        medChance = getRandomInt(5)+15;
+        secondaryChance = getRandomInt(100)+5
+        let generatedChord;
         tonicChance = 100 - subChance - domChance - medChance;
-        // console.log(subChance, domChance, medChance, tonicChance)
         switch (currentChord) {
             case 't':
-                currentChord = getPrevChordTonic(subChance, domChance, medChance, tonicChance)
-                // set current chord to new chord
-                // console.log('current chord ', currentChord)
-                progressionStr += currentChord
-                // console.log("=========")
+                generatedChord = getPrevChordTonic(subChance, domChance, medChance, tonicChance, secondaryChance)
+                currentChord = generatedChord.choice
+                progressionStr += generatedChord.target
                 break;
             case 's':
-                currentChord = getPrevChordSub(domChance, medChance, tonicChance)
-                // // set current chord to new chord
-                // console.log('current chord ', currentChord)
-                // console.log('subdominant')
-                progressionStr += currentChord
-                // console.log("=========")
+                generatedChord = getPrevChordSub(domChance, medChance, tonicChance,secondaryChance)
+                currentChord = generatedChord.choice
+                progressionStr += generatedChord.target
                 break;
             case 'd':
-                currentChord = getPrevChordDom(subChance, medChance, tonicChance)
-                // // set current chord to new chord
-                // console.log('current chord ', currentChord)
-                // console.log('dominant')
-                progressionStr += currentChord
-                // console.log("=========")
+                generatedChord = getPrevChordDom(subChance, medChance, tonicChance,secondaryChance)
+                currentChord = generatedChord.choice
+                progressionStr += generatedChord.target
                 break;
             case 'm':
-                currentChord = getPrevChordMed(subChance, domChance, tonicChance)
-                // console.log('mediant')
-                progressionStr += currentChord
-                // console.log("=========")
+                generatedChord = getPrevChordMed(subChance, domChance, tonicChance,secondaryChance)
+                currentChord = generatedChord.choice
+                progressionStr += generatedChord.target
                 break;
             default:
                 console.log('whoops! error occurred')
         }
     }
 
-    // let name = "GeeksforGeeks";
     let reverseString = '';
     for (let i = progressionStr.length - 1; i >= 0; i--) {
         reverseString += progressionStr[i];
     }
 
-    return reverseString
+    return progressionStr //process forwards, print backwards
 }
 
-function getPrevChordTonic(chanceSub, chanceDom, chanceMed, chanceTonic){
+function getPrevChordTonic(chanceSub, chanceDom, chanceMed, chanceTonic, chanceSecond){
+    let chordObj = {"choice":"","currentChord":""}
+
+    let secondChord = ""
+    
     let choices = [
         [chanceSub,"s"],
         [chanceDom,"d"],
@@ -83,68 +99,89 @@ function getPrevChordTonic(chanceSub, chanceDom, chanceMed, chanceTonic){
         [chanceTonic,"t"],
     ]
 
-    // console.log('choices', choices)
-
     let selection = pickChoice(choices)
-    // console.log('selection', selection)
 
-    let newChord = choices[selection][1]
+    if (chanceSecond >= 50 && (choices[selection][1] != "t")){
+        secondChord = "2"
+    }
 
-    return newChord
+    chordObj.choice = choices[selection][1]
+    chordObj.target = choices[selection][1]+secondChord
+
+    return chordObj
 
 }
 
-function getPrevChordSub(chanceDom, chanceMed, chanceTonic){
+function getPrevChordSub(chanceDom, chanceMed, chanceTonic, chanceSecond){
+    let chordObj = {"choice":"","currentChord":""}
+
+    let secondChord = ""
+    
     let choices = [
         [chanceDom,"d"],
         [chanceMed,"m"],
         [chanceTonic,"t"],
     ]
-
-    // console.log('choices', choices)
-
+ 
     let selection = pickChoice(choices)
-    // console.log('selection', selection)
+  
+    if (chanceSecond >= 50 && (choices[selection][1] != "t")){
+        secondChord = "2"
+    }
+ 
+    chordObj.choice = choices[selection][1]
+    chordObj.target = choices[selection][1]+secondChord
 
-    let newChord = choices[selection][1]
-
-    return newChord
+    return chordObj
 
 }
 
-function getPrevChordDom(chanceSub, chanceMed, chanceTonic){
+function getPrevChordDom(chanceSub, chanceMed, chanceTonic, chanceSecond){
+    let chordObj = {"choice":"","currentChord":""}
+
+    let secondChord = ""
+    
     let choices = [
         [chanceSub,"s"],
         [chanceMed,"m"],
         [chanceTonic,"t"],
     ]
 
-    // console.log('choices', choices)
-
     let selection = pickChoice(choices)
-    // console.log('selection', selection)
 
-    let newChord = choices[selection][1]
+ 
+    if (chanceSecond >= 50 && (choices[selection][1] != "t")){
+        secondChord = "2"
+    }
+ 
+    chordObj.choice = choices[selection][1]
+    chordObj.target = choices[selection][1]+secondChord
 
-    return newChord
+    return chordObj
 
 }
 
-function getPrevChordMed(chanceSub, chanceDom, chanceTonic){
+function getPrevChordMed(chanceSub, chanceDom, chanceTonic, chanceSecond){
+    let chordObj = {"choice":"","currentChord":""}
+
+    let secondChord = ""
+    
     let choices = [
         [chanceSub,"s"],
         [chanceDom,"d"],
         [chanceTonic,"t"],
     ]
 
-    // console.log('choices', choices)
-
     let selection = pickChoice(choices)
-    // console.log('selection', selection)
+ 
+    if (chanceSecond >= 50 && (choices[selection][1] != "t")){
+        secondChord = "2"
+    }
+ 
+    chordObj.choice = choices[selection][1]
+    chordObj.target = choices[selection][1]+secondChord
 
-    let newChord = choices[selection][1]
-
-    return newChord
+    return chordObj
 
 }
 

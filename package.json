@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "chromatic":"sh main.sh chromatic",
-    "tonal":"sh main.sh tonal"
+    "tonal":"sh main.sh tonal",
+    "tonal-test":"node scripts/tonal-progression.mjs"
   },
   "keywords": [],
   "author": "",
