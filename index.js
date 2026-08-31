@@ -1,5 +1,6 @@
 import process from 'node:process'
 import { chromaticProgressionCreator } from './scripts/chromatic-chord.mjs'
+import { tonalProgressionCreator, createTonalProgressionCode } from './scripts/tonal-progression.mjs'
 
 // later on
     // add other chord types onto list - sus chords, 6 chords
@@ -13,7 +14,7 @@ switch (progressionType) {
         chordList = chromaticProgressionCreator(chordPattern)
         break;
     case 'tonal':
-        chordList = [ 'F', 'G', 'C', 'C7sus' ]
+        chordList = tonalProgressionCreator(createTonalProgressionCode(4))
         break;
 }
 

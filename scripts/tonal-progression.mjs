@@ -1,46 +1,15 @@
 import  { Roots, getRandomInt, getRandomRoot,getRandomInterval, getRandomChord, getNextRoot, getRandomTriad, selectFlavor, wrapOctave} from "./helper.mjs"
 
-// find start chord
-    // random root
-    // random type
-        // Major route
-        // Minor Route
-
-
-// create random progression route - one layer
-    // end on tonic
-    // random number of chords - from 2 to 8
-    // chord routes
-        // 1234567t
-        // sub to tonic or dom
-        // mediant to tonic or sub
-        // dom to tonic or sub
-        // tonic to sub or dom
-
-// create random progression route - 2ndary doms
-    // end on tonic
-    // random number of chords - from 2 to 8
-    // chord routes
-        // 1234567t
-        // sub to tonic or dom OR 2ndary 25 of sub
-        // mediant to tonic or sub OR 2ndary 25 of med
-        // dom to tonic or sub OR 2ndary 25 of dom
-        // tonic to sub or dom
-
-
-
-
-
-function createTonalProgressionCode(num) {
+export function createTonalProgressionCode(num) {
     let progressionStr = "t"
     let currentChord = "t"
     let subChance, domChance, medChance, tonicChance, secondaryChance;
    
     for (let i = 0; i < num; i++){
-        subChance = getRandomInt(5)+30;
-        domChance = getRandomInt(5)+30;
-        medChance = getRandomInt(5)+15;
-        secondaryChance = getRandomInt(100)+5
+        subChance = getRandomInt(5)+20;
+        domChance = getRandomInt(5)+20;
+        medChance = getRandomInt(5)+20;
+        secondaryChance = getRandomInt(100)+10
         let generatedChord;
         tonicChance = Math.abs(100 - subChance - domChance - medChance);
         switch (currentChord) {
@@ -67,11 +36,6 @@ function createTonalProgressionCode(num) {
             default:
                 console.log('whoops! error occurred')
         }
-    }
-
-    let reverseString = '';
-    for (let i = progressionStr.length - 1; i >= 0; i--) {
-        reverseString += progressionStr[i];
     }
 
     return progressionStr //process forwards, print backwards
@@ -223,8 +187,6 @@ function pickChoice(choiceArr) {
   
 };
 
-console.log(tonalProgressionCreator(createTonalProgressionCode(4)))
-
 function tonicChord(rootChord, lastChord){
 
     let chordOptions = [
@@ -257,16 +219,15 @@ function tonicChord(rootChord, lastChord){
     let newChord = chordOptions[getRandomInt(chordOptions.length)]
     let newRoot = Math.abs(wrapOctave(parseInt(rootChord.root.id)+parseInt(newChord.interval)))
 
-    // console.log(('new root', wrapOctave(Math.abs(parseInt(rootChord.root.id)+parseInt(newChord.interval)))))
-    console.log('new root', newRoot)
+    let newRootNote = Roots.find((element) => element.id == newRoot).note
 
-    // need to get the note based on the newRoot value -> searching array of roots for object that has that as the ID, then returning the text value
-
-    // return interval, determine root of new chord
+    newChord["root"] = {"id":newRoot, "note":newRootNote}
+    newChord["printChord"] = `${newChord.root.note} ${newChord.triad}`
     
     return newChord;
 }
 
+// update - copy from tonic, update Chord Options
 function subdomChord(rootChord, lastChord){
     let newChord = {
         "root":"",
@@ -312,6 +273,7 @@ function subdomChord(rootChord, lastChord){
     return newChord;
 }
 
+// copy from tonic, update chord options
 function domChord(rootChord, lastChord){
     let newChord = {
         "root":"",
@@ -363,6 +325,7 @@ function domChord(rootChord, lastChord){
     return newChord;
 }
 
+// copy from tonic, update chord options
 function medChord(rootChord, lastChord){
     let newChord = {
         "root":"",
@@ -400,6 +363,7 @@ function medChord(rootChord, lastChord){
     return newChord;
 }
 
+// copy from tonal, update chord options
 function secondaryChord(rootChord, lastChord){
     let newChord = {
         "root":"",
@@ -475,7 +439,7 @@ function getScaleDegree(root, triad, route){
     }
 }
 
-function tonalProgressionCreator(progression){
+export function tonalProgressionCreator(progression){
     let chordList = []
     let currentChord;
     let nextChord;
@@ -487,30 +451,15 @@ function tonalProgressionCreator(progression){
     };
 
     firstChord["scaleDegree"] = getScaleDegree(firstChord.root, firstChord.triad, firstChord.route)
-    chordList.push(firstChord)
+    firstChord["printChord"] = `${firstChord.root.note} ${firstChord.triad}`
+    chordList.push(firstChord.printChord)
     currentChord=firstChord
-
-    console.log('first chord: ', firstChord)
-    // console.log(progression)
-
-    // based on first chord
-        // symbol determines direction - m d s 2
-        // if symbol is m, d, or s
-            // based on route and tonic chord, pick chord from same route (chance to not)
-            // if dominant
-                // chance to be Neapolitan 6, in which case it goes to V7, to bVI
-            // add chord to list, set as current chord
-        // if symbol is 2
-            // based on route and current Chord
-            // 
 
     for (let i = 0; i < progression.length; i ++){
         switch (progression[i]) {
             case 't':
-                console.log('t')
                 nextChord = tonicChord(firstChord, currentChord)
-                // console.log(nextChord)
-                chordList.push(nextChord);
+                chordList.push(nextChord.printChord);
                 currentChord=nextChord
                 break;
             case 's':
@@ -530,6 +479,8 @@ function tonalProgressionCreator(progression){
         }
     }
 
-    return chordList
+    return chordList.reverse()
 
 }
+
+console.log('chords', tonalProgressionCreator(createTonalProgressionCode(4)))
