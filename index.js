@@ -1,18 +1,21 @@
 import process from 'node:process'
-import { progressionCreator } from './scripts/chord.mjs'
+import { chromaticProgressionCreator } from './scripts/chromatic-chord.mjs'
+import { tonalProgressionCreator, createTonalProgressionCode } from './scripts/tonal-progression.mjs'
 
 // later on
     // add other chord types onto list - sus chords, 6 chords
-    // look into why travel chord calculation is hanging
-    // have some way to export data into a file
 
-const chordPattern = process.argv[2]
+const progressionType = process.argv[2]
+const chordPattern = process.argv[3]
+let chordList;
 
-// selector script
+switch (progressionType) {
+    case 'chromatic':
+        chordList = chromaticProgressionCreator(chordPattern)
+        break;
+    case 'tonal':
+        chordList = tonalProgressionCreator(createTonalProgressionCode(4))
+        break;
+}
 
-// logic to select chromatic progression
-let chordList = progressionCreator(chordPattern)
-// console.log('chord list')
 console.log(chordList)
-
-// idea - use a shell script to run the chord list multiple times, save to a txt file
