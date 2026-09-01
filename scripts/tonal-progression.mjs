@@ -5,7 +5,7 @@ export function createTonalProgressionCode(num) {
     let currentChord = "t"
     let subChance, domChance, medChance, tonicChance, secondaryChance;
    
-    for (let i = 0; i < num; i++){
+    for (let i = 0; i < num-1; i++){
         subChance = getRandomInt(5)+20;
         domChance = getRandomInt(5)+20;
         medChance = getRandomInt(5)+20;
@@ -187,7 +187,7 @@ function pickChoice(choiceArr) {
   
 };
 
-function tonicChord(rootChord, lastChord){
+function tonicChord(rootChord, lastChord, flavor){
 
     let chordOptions = [
         {"interval":"0",
@@ -228,189 +228,182 @@ function tonicChord(rootChord, lastChord){
 }
 
 // update - copy from tonic, update Chord Options
-function subdomChord(rootChord, lastChord){
-    let newChord = {
-        "root":"",
-        "triad":"",
-        "route":""
-    };
-    
+function subdomChord(rootChord, lastChord, flavor){
     let chordOptions = [
-        {"interval":"",
-        "triad":"",
-        "route":""},
-        {"interval":"",
-        "triad":"",
-        "route":""},
-        {"interval":"",
-        "triad":"",
-        "route":""},
-        {"interval":"",
-        "triad":"",
-        "route":""},
-        {"interval":"",
-        "triad":"",
-        "route":""},
-        {"interval":"",
-        "triad":"",
-        "route":""}
+        {"interval":"5",
+        "triad":"major",
+        "route":"major",
+        "scaleDegree": 4},
+        {"interval":"2",
+        "triad":"min",
+        "route":"major",
+        "scaleDegree": 2},
+        {"interval":"5",
+        "triad":"min",
+        "route":"minor",
+        "scaleDegree": 4},
+        {"interval":"-4",
+        "triad":"major",
+        "route":"minor",
+        "scaleDegree": 6},
+        {"interval":"2",
+        "triad":"dim",
+        "route":"minor",
+        "scaleDegree": 2}
     ]
 
-    // chord dictionary
-        // interval from root chord, Tonality, Route
-        // Major Route
-            // 5, Major
-            // 2, Minor
-        // Minor Route
-            // 5, Minor
-            // -4, Major
-            // 2, Diminished
+    let newChord = chordOptions[getRandomInt(chordOptions.length)]
+    let newRoot = Math.abs(wrapOctave(parseInt(rootChord.root.id)+parseInt(newChord.interval)))
 
-    // select chord
+    let newRootNote = Roots.find((element) => element.id == newRoot).note
 
-    // return interval, determine root of new chord
+    newChord["root"] = {"id":newRoot, "note":newRootNote}
+    newChord["printChord"] = `${newChord.root.note} ${newChord.triad}`
     
     return newChord;
 }
 
 // copy from tonic, update chord options
-function domChord(rootChord, lastChord){
-    let newChord = {
-        "root":"",
-        "triad":"",
-        "route":""
-    };
-
-
+function domChord(rootChord, lastChord, flavor){
     let chordOptions = [
-        {"interval":"",
-        "triad":"",
-        "route":""},
-        {"interval":"",
-        "triad":"",
-        "route":""},
-        {"interval":"",
-        "triad":"",
-        "route":""},
-        {"interval":"",
-        "triad":"",
-        "route":""},
-        {"interval":"",
-        "triad":"",
-        "route":""},
-        {"interval":"",
-        "triad":"",
-        "route":""}
+        {"interval":"7",
+        "triad":"maj",
+        "route":"major",
+        "scaleDegree": 5},
+        {"interval":"11",
+        "triad":"dim",
+        "route":"major",
+        "scaleDegree": 7},
+        {"interval":"7",
+        "triad":"maj",
+        "route":"minor",
+        "scaleDegree": 1}
     ]
-    // has option to return extra chord - 1 6/4 chord before V
-    
-    // chord dictionary
-        // interval from root chord, Tonality, Route
-        // Major Route
-            // 7, Major
-            // 1, Major in 2nd inv (optional, before 7 Major)
-            // 1, Minor in 2nd inv (optional, before 7 Major)
-            // 11, diminished
-            // 1, Major
-        // Minor Route
-            // 7, Major
-            // 10, Major
-            // 8, Major
-            // 11, diminished
 
-    // select chord
+    // update options, figure out logic
+    let cadentialOptions = [
+        {"interval":"5",
+        "triad":"maj",
+        "route":"major",
+        "scaleDegree": 5},
+        {"interval":"0",
+        "triad":"sus4",
+        "route":"major",
+        "scaleDegree": 7},
+        {"interval":"5",
+        "triad":"minor",
+        "route":"minor",
+        "scaleDegree": 5}
+    ]
+    let chordArr=[];
+    let cadentialChance = 50
+    let cadChord
 
-    // return interval, determine root of new chord
+    // console.log('chord arr', chordArr)
+
+    let newChord = chordOptions[getRandomInt(chordOptions.length)]
+    let newRoot = Math.abs(wrapOctave(parseInt(rootChord.root.id)+parseInt(newChord.interval)))
+
+    let newRootNote = Roots.find((element) => element.id == newRoot).note
+
+    newChord["root"] = {"id":newRoot, "note":newRootNote}
+    newChord["printChord"] = `${newChord.root.note} ${newChord.triad}`
+    chordArr.push(newChord)
+
+    // console.log('chord arr again', chordArr)
     
-    return newChord;
+    if (cadentialChance > 50) {
+        cadChord = cadentialOptions[getRandomInt(chordOptions.length)]
+        let cadRoot = Math.abs(wrapOctave(parseInt(newChord.root.id)+parseInt(cadChord.interval)))
+
+        let cadRootNote = Roots.find((element) => element.id == cadRoot).note
+
+        cadChord["root"] = {"id":cadRoot, "note":cadRootNote}
+        cadChord["printChord"] = `${cadChord.root.note} ${cadChord.triad}`
+        chordArr.push(cadChord)
+    }
+
+    // console.log('chord arr after cadence', chordArr)
+
+    return chordArr;
 }
 
 // copy from tonic, update chord options
-function medChord(rootChord, lastChord){
-    let newChord = {
-        "root":"",
-        "triad":"",
-        "route":""
-    };
-
-    let chordOptions = [
-        {"interval":"",
-        "triad":"",
-        "route":""},
-        {"interval":"",
-        "triad":"",
-        "route":""},
-        {"interval":"",
-        "triad":"",
-        "route":""},
-        {"interval":"",
-        "triad":"",
-        "route":""},
-        {"interval":"",
-        "triad":"",
-        "route":""},
-        {"interval":"",
-        "triad":"",
-        "route":""}
+function medChord(rootChord, lastChord, flavor){
+     let chordOptions = [
+        {"interval":"3",
+        "triad":"minor",
+        "route":"major",
+        "scaleDegree": 1}
     ]
-    
-    // chord dictionary
-        // interval from root chord, Tonality, Route
-        // 4, minor
 
-    // return interval, determine root of new chord
+    let newChord = chordOptions[getRandomInt(chordOptions.length)]
+    let newRoot = Math.abs(wrapOctave(parseInt(rootChord.root.id)+parseInt(newChord.interval)))
+
+    let newRootNote = Roots.find((element) => element.id == newRoot).note
+
+    newChord["root"] = {"id":newRoot, "note":newRootNote}
+    newChord["printChord"] = `${newChord.root.note} ${newChord.triad}`
     
     return newChord;
 }
 
-// copy from tonal, update chord options
-function secondaryChord(rootChord, lastChord){
-    let newChord = {
-        "root":"",
-        "triad":"",
-        "route":""
-    };
+function lastChordFormatting(chord){
+    if (chord.root == undefined){
+        return chord[0]
+    } else {
+        return chord
+    }
+}
 
-    // base on last root
-
-    let chordOptions = [
-        {"interval":"",
-        "triad":"",
-        "route":""},
-        {"interval":"",
-        "triad":"",
-        "route":""},
-        {"interval":"",
-        "triad":"",
-        "route":""},
-        {"interval":"",
-        "triad":"",
-        "route":""},
-        {"interval":"",
-        "triad":"",
-        "route":""},
-        {"interval":"",
-        "triad":"",
-        "route":""}
+// fix this
+function secondaryChord(rootChord, lastChord, flavor){
+     let chordOptionsDom = [
+        {"interval":"7",
+        "triad":"maj",
+        "route":"major",
+        "scaleDegree": 5},
+        {"interval":"7",
+        "triad":"maj",
+        "route":"minor",
+        "scaleDegree": 5},
     ]
 
-    // chance to just be dominant vs sub and dom
-    
-    // chord dictionary
-        // 2 (optional, precedes 5) 
-            // 2, minor
-            // 2, diminished
-            // b6, major
-        // V (req'd)
-            // 7, major
-            // 11, diminished
-            // b2, major
-            // optional -> 1 6/4 into V
-            // other optional -> N6 (bII in third inv)
+    let chordOptionsSub = [
+        {"interval":"2",
+        "triad":"min",
+        "route":"major",
+        "scaleDegree": 2},
+        {"interval":"2",
+        "triad":"dim",
+        "route":"minor",
+        "scaleDegree": 2},
+        {"interval":"5",
+        "triad":"major",
+        "route":"major",
+        "scaleDegree": 4},
+        {"interval":"5",
+        "triad":"minor",
+        "route":"minor",
+        "scaleDegree": 4}
+    ]
 
-    // return interval, determine root of new chord
+    let newChordDom = chordOptionsDom[getRandomInt(chordOptionsDom.length)]
     
-    return newChord;
+    let newRootDom = Math.abs(wrapOctave(lastChordFormatting(lastChord).root.id+parseInt(newChordDom.interval)))
+    let newRootNoteDom = Roots.find((element) => element.id == newRootDom).note
+
+    newChordDom["root"] = {"id":newRootDom, "note":newRootNoteDom}
+    newChordDom["printChord"] = `${newChordDom.root.note} ${newChordDom.triad}`
+
+    let newChordSub = chordOptionsSub[getRandomInt(chordOptionsSub.length)]
+    let newRootSub = Math.abs(wrapOctave(lastChordFormatting(lastChord).root.id+parseInt(newChordSub.interval)))
+    let newRootNoteSub = Roots.find((element) => element.id == newRootSub).note
+
+    newChordSub["root"] = {"id":newRootSub, "note":newRootNoteSub}
+    newChordSub["printChord"] = `${newChordSub.root.note} ${newChordSub.triad}`
+    
+    return [newChordDom, newChordSub];
 }
 
 function getScaleDegree(root, triad, route){
@@ -439,7 +432,7 @@ function getScaleDegree(root, triad, route){
     }
 }
 
-export function tonalProgressionCreator(progression){
+export function tonalProgressionCreator(progression, flavor){
     let chordList = []
     let currentChord;
     let nextChord;
@@ -455,24 +448,39 @@ export function tonalProgressionCreator(progression){
     chordList.push(firstChord.printChord)
     currentChord=firstChord
 
+    let flavorRoute = ""
+
     for (let i = 0; i < progression.length; i ++){
         switch (progression[i]) {
             case 't':
-                nextChord = tonicChord(firstChord, currentChord)
+                nextChord = tonicChord(firstChord, currentChord, flavorRoute)
                 chordList.push(nextChord.printChord);
                 currentChord=nextChord
                 break;
             case 's':
-                // console.log('s')
+                nextChord = subdomChord(firstChord, currentChord, flavorRoute)
+                chordList.push(nextChord.printChord);
+                currentChord=nextChord
                 break;
             case 'd':
-                // console.log('d')
+                nextChord = domChord(firstChord, currentChord, flavorRoute)
+                for (let i = 0; i < nextChord.length; i++) {
+                    chordList.push(nextChord[i].printChord);
+                }
+                currentChord=nextChord[0]
                 break;
             case 'm':
-                // console.log('m')
+                nextChord = medChord(firstChord, currentChord, flavorRoute)
+                chordList.push(nextChord.printChord);
+                currentChord=nextChord
                 break;
             case '2':
-                // console.log('2')
+                let lastChord = nextChord
+                nextChord = secondaryChord(firstChord, lastChord, flavorRoute)
+                for (let i = 0; i < nextChord.length; i++) {
+                    chordList.push(nextChord[i].printChord);
+                }
+                currentChord=nextChord[0]
                 break;
             default:
                 console.log('whoops! error occurred')
@@ -482,5 +490,3 @@ export function tonalProgressionCreator(progression){
     return chordList.reverse()
 
 }
-
-console.log('chords', tonalProgressionCreator(createTonalProgressionCode(4)))
